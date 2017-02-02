@@ -45,12 +45,7 @@ http {
     location / {
       mruby_post_read_handler /app/bin/config/lib/ngx_mruby/headers.rb cache;
       mruby_set $fallback /app/bin/config/lib/ngx_mruby/routes_fallback.rb cache;
-      try_files $uri $uri/ dist/new-home.html $fallback;
-    }
-
-    location ~ ^/(.*)$ {
-      include /usr/local/openresty/nginx/conf/mime.types;
-      try_files $uri dist/index.html;
+      try_files $uri $uri/ new-home.html $fallback;
     }
 
   <% if clean_urls %>
@@ -104,6 +99,11 @@ http {
       return <%= hash['status'] || 301 %> <%= hash['url'] %>;
     }
   <% end %>
+
+    location ~ ^/(.*)$ {
+      include /usr/local/openresty/nginx/conf/mime.types;
+      try_files $uri index.html;
+    }
 
   }
 }
